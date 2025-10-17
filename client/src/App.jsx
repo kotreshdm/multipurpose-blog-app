@@ -2,14 +2,14 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import AppRoutes from "./routes/AppRoutes";
-import { useSelector } from "react-redux";
+import { useTheme } from "./store/features/theme";
 
 function App() {
-  const theme = useSelector((state) => state.theme.mode);
+  const { mode } = useTheme();
   return (
     <div
       className={
-        theme === "dark"
+        mode === "dark"
           ? "bg-dark text-light min-vh-100"
           : "bg-light text-dark min-vh-100"
       }
