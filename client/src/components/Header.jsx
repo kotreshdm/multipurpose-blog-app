@@ -10,8 +10,12 @@ import {
 import "bootstrap-icons/font/bootstrap-icons.css";
 import AppRoutes from "../routes/AppRoutes";
 import { NavLink } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleTheme } from "../store/themeSlice";
 
 export default function Header() {
+  const dispatch = useDispatch();
+  const theme = useSelector((state) => state.theme.mode);
   // Example: this could later come from user context or API
   const user = {
     name: "Kotresh",
@@ -25,12 +29,12 @@ export default function Header() {
 
   return (
     <Navbar
-      bg='dark'
-      variant='dark'
       expand='lg'
       sticky='top'
       className='shadow-sm'
       style={{ padding: 0 }}
+      bg={theme === "light" ? "light" : "dark"}
+      variant={theme === "light" ? "light" : "dark"}
     >
       <Container>
         {/* Left: Logo + Brand */}
@@ -56,6 +60,19 @@ export default function Header() {
                 {route.label}
               </NavLink>
             ))}
+            {/* Theme toggle icon */}
+            <div
+              className='fs-4 text-primary mx-3'
+              style={{ cursor: "pointer" }}
+              onClick={() => dispatch(toggleTheme())}
+              title='Toggle Theme'
+            >
+              {theme === "light" ? (
+                <i className='bi bi-moon-fill'></i>
+              ) : (
+                <i className='bi bi-sun-fill'></i>
+              )}
+            </div>
 
             {/* User Profile Dropdown */}
             <NavDropdown
@@ -90,6 +107,7 @@ export default function Header() {
               <NavDropdown.Item href='#settings'>
                 <i className='bi bi-gear me-2'></i> Settings
               </NavDropdown.Item>
+
               <NavDropdown.Divider />
               <NavDropdown.Item href='#logout' className='text-danger'>
                 <i className='bi bi-box-arrow-right me-2'></i> Logout
