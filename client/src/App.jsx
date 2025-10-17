@@ -1,22 +1,28 @@
-import { useEffect, useState } from "react";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Header from "./components/Header";
+import AppRoutes from "./routes/AppRoutes";
 
 function App() {
-  const [msg, setMsg] = useState("");
-
-  useEffect(() => {
-    fetch("/api/hello", {
-      credentials: "include", // if you use cookies/auth that require credentials
-    })
-      .then((r) => r.json())
-      .then((data) => setMsg(data.msg))
-      .catch((err) => console.error(err));
-  }, []);
-
   return (
-    <div>
-      <h1>Server says:</h1>
-      <pre>{msg}</pre>
-    </div>
+    <Router>
+      <Header />
+      <div className='container mt-4'>
+        <React.Suspense
+          fallback={<div className='text-center mt-5'>Loading...</div>}
+        >
+          <Routes>
+            {AppRoutes.map((route) => (
+              <Route
+                key={route.path}
+                path={route.path}
+                element={route.element}
+              />
+            ))}
+          </Routes>
+        </React.Suspense>
+      </div>
+    </Router>
   );
 }
 

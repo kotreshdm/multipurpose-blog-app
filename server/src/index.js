@@ -11,7 +11,7 @@ await fastify.register(cors, {
 });
 
 // Example route
-fastify.get("/api/hello", async (request, reply) => {
+fastify.get("/api/v1/hello", async (request, reply) => {
   return { msg: "Hello from Fastify 1234" };
 });
 
