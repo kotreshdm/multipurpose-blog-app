@@ -10,20 +10,18 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import AppRoutes from "../routes/AppRoutes";
 import { NavLink } from "react-router-dom";
 import { useTheme } from "../store/features/theme";
-
+import { FaUserCircle } from "react-icons/fa";
 export default function Header() {
   const { mode, toggleTheme } = useTheme();
 
   // Example: this could later come from user context or API
   const user = {
-    name: "Kotresh",
-    status: "online", // or "offline"
-    avatar: "https://placehold.co/600x400", // You can replace this with your own logo
+    name: "KOTRESHA D M",
+    avatar:
+      "https://lh3.googleusercontent.com/a/ACg8ocLNKp-z93cOWhVKuUnU7kuQDY8om5WLRiVcu4r96WH-tcNc9Djwaw=s192-c", // or null if unavailable
   };
 
-  const getStatusColor = (status) => {
-    return status === "online" ? "success" : "secondary";
-  };
+  const isImageAvailable = Boolean(user.avatar);
 
   return (
     <Navbar
@@ -60,55 +58,54 @@ export default function Header() {
             ))}
             {/* Theme toggle icon */}
             <div
-              className='fs-4 text-primary mx-3'
+              className={`fs-5 mx-2 ${
+                mode === "light" ? "text-dark" : "text-light"
+              }`}
               style={{ cursor: "pointer" }}
               onClick={toggleTheme}
               title='Toggle Theme'
             >
               {mode === "light" ? (
-                <i className='bi bi-moon'></i>
+                <i className='bi bi-moon'></i> // 🌙
               ) : (
-                <i className='bi bi-sun'></i>
+                <i className='bi bi-sun'></i> // ☀️
               )}
             </div>
 
-            {/* User Profile Dropdown */}
+            {/* User Dropdown */}
             <NavDropdown
-              align='end'
+              align='center'
               title={
                 <span className='d-inline-flex align-items-center gap-2'>
-                  <Image
-                    src={user.avatar}
-                    roundedCircle
-                    width='35'
-                    height='35'
-                    alt='User'
-                    className='border border-light'
-                  />
-                  <Badge
-                    bg={getStatusColor(user.status)}
-                    className='rounded-pill'
-                  >
-                    {user.status}
-                  </Badge>
+                  {isImageAvailable ? (
+                    <img
+                      src={user.avatar}
+                      alt='User'
+                      width='30'
+                      height='30'
+                      className='rounded-circle border border-light'
+                      style={{ objectFit: "cover" }}
+                      onError={(e) => {
+                        // fallback if image fails to load
+                        e.target.onerror = null;
+                        e.target.style.display = "none";
+                      }}
+                    />
+                  ) : (
+                    <FaUserCircle size={25} />
+                  )}
+                  <span className='fw-semibold'>{user.name}</span>
                 </span>
               }
               id='user-dropdown'
+              className='no-caret'
             >
-              <NavDropdown.Header>
-                Signed in as <strong>{user.name}</strong>
-              </NavDropdown.Header>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href='#profile'>
-                <i className='bi bi-person me-2'></i> Profile
-              </NavDropdown.Item>
-              <NavDropdown.Item href='#settings'>
-                <i className='bi bi-gear me-2'></i> Settings
-              </NavDropdown.Item>
-
+              <NavDropdown.Item href='#profile'>My Profile</NavDropdown.Item>
+              <NavDropdown.Item href='#orders'>Orders</NavDropdown.Item>
+              <NavDropdown.Item href='#wishlist'>Wishlist</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item href='#logout' className='text-danger'>
-                <i className='bi bi-box-arrow-right me-2'></i> Logout
+                Logout
               </NavDropdown.Item>
             </NavDropdown>
           </Nav>
